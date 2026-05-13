@@ -1,7 +1,7 @@
 let pct = 0;
-const pctEl = document.getElementById('pct');
-const opening = document.getElementById('opening');
-const app = document.getElementById('app');
+const pctEl = $('#pct');
+const opening = $('#opening');
+const app = $('#app');
 
 const tick = setInterval(() => {
   pct += Math.floor(Math.random() * 8) + 2;
@@ -10,34 +10,35 @@ const tick = setInterval(() => {
     clearInterval(tick);
     launchApp();
   }
-  pctEl.textContent = pct + '%';
+  pctEl.text(pct + '%');
 }, 80);
 
 function launchApp() {
   setTimeout(() => {
-    opening.classList.add('opening-fade-out');
+    opening.addClass('opening-fade-out');
     setTimeout(() => {
-      opening.style.display = 'none';
-      app.classList.add('visible');
+      opening.css('display', 'none');
+      app.addClass('visible');
     }, 700);
   }, 400);
 }
 
 // Kalkulator Logic
+
 let currentInput = '0';
 let previousInput = '';
 let operator = null;
 let shouldReset = false;
 let history = [];
 
-const displayEl = document.getElementById('display');
-const exprEl = document.getElementById('expr');
+const displayEl = $('#display');
+const exprEl = $('#expr');
 
 function updateDisplay(val) {
-  displayEl.textContent = val;
-  displayEl.classList.remove('pop');
-  void displayEl.offsetWidth;
-  displayEl.classList.add('pop');
+  displayEl.text(val);
+  displayEl.removeClass('pop');
+  void displayEl[0].offsetWidth;
+  displayEl.addClass('pop');
 }
 
 function inputNum(val) {
@@ -70,7 +71,7 @@ function setOp(op) {
   operator = op;
   shouldReset = true;
   const sym = { '+': '+', '-': '−', '*': '×', '/': '÷' };
-  exprEl.textContent = fmt(previousInput) + ' ' + sym[op];
+  exprEl.text(fmt(previousInput) + ' ' + sym[op]);
 }
 
 function calculate(final = true) {
@@ -86,7 +87,7 @@ function calculate(final = true) {
   }
   const sym = { '+': '+', '-': '−', '*': '×', '/': '÷' };
   if (final) {
-    exprEl.textContent = fmt(previousInput) + ' ' + sym[operator] + ' ' + fmt(String(b)) + ' =';
+    exprEl.text(fmt(previousInput) + ' ' + sym[operator] + ' ' + fmt(String(b)) + ' =');
     addHistory(fmt(previousInput) + ' ' + sym[operator] + ' ' + fmt(String(b)), result);
     operator = null;
   }
@@ -100,7 +101,7 @@ function clearAll() {
   previousInput = '';
   operator = null;
   shouldReset = false;
-  exprEl.textContent = '';
+  exprEl.text('');
   updateDisplay('0');
 }
 
@@ -129,31 +130,31 @@ function fmt(s) {
   return parseFloat(parts[0]).toLocaleString('id-ID') + (parts[1] !== undefined ? '.' + parts[1] : '');
 }
 
-document.querySelectorAll('.btn').forEach(btn => {
-  btn.addEventListener('click', e => {
-    rippleEffect(e, btn);
-    const a = btn.dataset.action;
-    if (a === 'num') inputNum(btn.dataset.val);
-    else if (a === 'decimal') inputDecimal();
-    else if (a === 'op') setOp(btn.dataset.op);
-    else if (a === 'equals') calculate(true);
-    else if (a === 'clear') clearAll();
-    else if (a === 'sign') toggleSign();
-    else if (a === 'percent') percent();
-  });
+
+$('.btn').on('click', function(e) {
+  rippleEffect(e, this);
+  const a = $(this).data('action');
+  if (a === 'num') inputNum($(this).data('val'));
+  else if (a === 'decimal') inputDecimal();
+  else if (a === 'op') setOp($(this).data('op'));
+  else if (a === 'equals') calculate(true);
+  else if (a === 'clear') clearAll();
+  else if (a === 'sign') toggleSign();
+  else if (a === 'percent') percent();
 });
 
 function rippleEffect(e, btn) {
-  const r = document.createElement('span');
-  r.classList.add('ripple');
+  const r = $('<span class="ripple"></span>');
   const rect = btn.getBoundingClientRect();
-  r.style.left = (e.clientX - rect.left - 40) + 'px';
-  r.style.top = (e.clientY - rect.top - 40) + 'px';
-  btn.appendChild(r);
-  r.addEventListener('animationend', () => r.remove());
+  r.css({
+    left: (e.clientX - rect.left - 40) + 'px',
+    top: (e.clientY - rect.top - 40) + 'px'
+  });
+  $(btn).append(r);
+  r.on('animationend', () => r.remove());
 }
 
-document.addEventListener('keydown', e => {
+$(document).on('keydown', function(e) {
   if ('0123456789'.includes(e.key)) inputNum(e.key);
   else if (e.key === '.') inputDecimal();
   else if (e.key === '+') setOp('+');
@@ -182,27 +183,30 @@ function addHistory(expr, result) {
 }
 
 function renderHistory() {
-  const list = document.getElementById('histList');
+  const list = $('#histList');
   if (history.length === 0) {
-    list.innerHTML = '<div class="no-hist">Belum ada perhitungan.</div>';
+    list.html('<div class="no-hist">Belum ada perhitungan.</div>');
     return;
   }
-  list.innerHTML = history.map((h, i) =>
-    `<div class="hist-entry" onclick="recallHistory(${i})">
+  list.html(history.map((h, i) =>
+    `<div class="hist-entry" data-idx="${i}">
       <span>${h.expr}</span>
       <span class="result">= ${h.result}</span>
      </div>`
-  ).join('');
+  ).join(''));
+  $('.hist-entry').on('click', function() {
+    recallHistory($(this).data('idx'));
+  });
 }
 
 function recallHistory(i) {
   currentInput = String(round(parseFloat(history[i].result.replace(/\./g, '').replace(',', '.'))));
   shouldReset = true;
-  exprEl.textContent = '';
+  exprEl.text('');
   updateDisplay(history[i].result);
 }
 
 function toggleHistory() {
-  const panel = document.getElementById('histPanel');
-  panel.classList.toggle('open');
+  const panel = $('#histPanel');
+  panel.toggleClass('open');
 }
