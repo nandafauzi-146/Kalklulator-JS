@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Kalkulator – Smart</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet"/>
-  <link rel="shortcut icon" href="image.png" type="image/x-icon">
   <link rel="stylesheet" href="style.css">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <link rel="shortcut icon" href="image.png" type="image/x-icon">
 </head>
 <body>
   <!-- BACKGROUND FX -->
@@ -33,7 +33,7 @@
       <div class="inner-icon">🖩</div>
     </div>
     <div class="opening-title">KALKULATOR</div>
-    <div class="opening-sub">Futurristik - JavaScript</div>
+    <div class="opening-sub">Futuristik - JQuery</div>
     <div class="loader-bar-wrap">
       <div class="loader-bar" id="loader"></div>
     </div>
@@ -45,7 +45,7 @@
     <div class="calc-wrapper">
       <div class="calc-header">
         <h1>CALCULATOR</h1>
-        <div class="subtitle">Kalkulator Smart · JavaScript</div>
+        <div class="subtitle">Kalkulator Smart · jQuery</div>
       </div>
       <div class="calc-card">
         <!-- Display -->
@@ -82,9 +82,9 @@
         </div>
       </div>
       <!-- History toggle -->
-      <button class="history-toggle" id="histToggle" type="button">
+      <div class="history-toggle" id="histToggle">
         <span>▾</span> RIWAYAT PERHITUNGAN
-      </button>
+      </div>
       <div class="history-panel" id="histPanel">
         <div class="history-list" id="histList">
           <div class="no-hist">Belum ada perhitungan.</div>
@@ -93,6 +93,7 @@
       <div class="kbd-hint">⌨ Dukung input keyboard</div>
     </div>
   </div>
+
   <script src="app.js"></script>
 </body>
 </html>

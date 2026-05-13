@@ -106,9 +106,8 @@ body::before {
   background: linear-gradient(90deg, var(--blue-core), var(--accent));
   border-radius: 99px;
   box-shadow: 0 0 12px var(--accent);
-  animation: load-fill 2.4s cubic-bezier(.4,0,.2,1) .4s forwards;
+  transition: width 0.08s linear;
 }
-@keyframes load-fill { to { width: 100%; } }
 .loader-pct {
   margin-top: 12px;
   font-family: 'Orbitron', monospace;
